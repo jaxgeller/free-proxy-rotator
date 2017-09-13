@@ -10,11 +10,12 @@ const PROXY_OPTIONS = {
   sourcesBlackList: ['kingproxies', 'bitproxies']
 };
 
-const CWD = require('process').cwd()
+const CWD = process.cwd()
 const PORT = process.env.PORT || 1339
 const REFRESH_RATE = process.env.REFRESH_RATE || 60
 
 function renderProxies(proxies) {
+  console.log(proxies)
   return proxies
     .map((proxy, i) => `  server proxy${i} ${proxy}`) // intentional 2 spaces
     .join('\n');
@@ -62,8 +63,11 @@ function getProxyList() {
           proxyList[el] = 0; // if i figure out a good way to ping in node, ping server here
         });
       })
-      .on('end', () => resolve(proxyList))
-      .on('error', err => reject(err));
+      .on('end', () => {resolve(proxyList)})
+      .on('error', err => {
+        console.log(err)
+        reject(err)
+      });
   });
 }
 
@@ -99,7 +103,6 @@ async function getAndSaveProxyList() {
   const proxyList = await getProxyList();
   const keys = Object.keys(proxyList);
   const config = getConfig(keys).slice(0, 4095); // haproxy max servers
-
   await saveHaproxyConfig(config);
 }
 
@@ -119,8 +122,6 @@ function tick() {
 async function main() {
   try {
     await getAndSaveProxyList();
-    // should really be check and kill
-    await killHaproxy();
     await startHaproxy();
   } catch (e) {
     console.warn(e);

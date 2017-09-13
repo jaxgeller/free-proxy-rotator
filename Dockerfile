@@ -50,7 +50,7 @@ RUN set -x \
 COPY package.json .
 RUN npm install
 
-COPY . .
+COPY index.js .
 
 EXPOSE 1339
 CMD [ "npm", "start" ]
