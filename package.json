@@ -1,0 +1,16 @@
+{
+  "name": "free-proxy-rotator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "@jaxgeler",
+  "license": "MIT",
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "ip": "^1.1.5",
+    "proxy-lists": "^1.14.1"
+  }
+}

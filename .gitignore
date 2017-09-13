@@ -1,0 +1,4 @@
+node_modules
+.python-version
+ha.pid
+haproxy.cfg
