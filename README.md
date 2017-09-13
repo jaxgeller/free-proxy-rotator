@@ -1,6 +1,8 @@
 # Free Proxy Rotator
 
-Tunnel requests through free proxies found online.
+Tunnel requests through free proxies found online. Proxy quality is low, use with caution.
+
+Proxies found with [proxy-list](https://github.com/chill117/proxy-lists)
 
 ```bash
 $ docker run -p 1339:1339 jaxgeller/rotating-proxy

@@ -15,9 +15,9 @@ const PORT = process.env.PORT || 1339
 const REFRESH_RATE = process.env.REFRESH_RATE || 60
 
 function renderProxies(proxies) {
-  console.log(proxies)
   return proxies
-    .map((proxy, i) => `  server proxy${i} ${proxy}`) // intentional 2 spaces
+    .filter(proxy => proxy !== undefined)
+    .map((proxy, i) => `  server proxy${i} ${proxy.trim()}`) // intentional 2 spaces
     .join('\n');
 }
 
@@ -57,6 +57,7 @@ function getProxyList() {
       .on('data', proxies => {
         proxies.forEach(proxy => {
           if (!ip.isV4Format(proxy.ipAddress)) return;
+          if (proxy.port < 80) return;
 
           const el = `${proxy.ipAddress}:${proxy.port}`;
 
@@ -102,7 +103,8 @@ async function getAndSaveProxyList() {
   console.log('fetching proxies');
   const proxyList = await getProxyList();
   const keys = Object.keys(proxyList);
-  const config = getConfig(keys).slice(0, 4095); // haproxy max servers
+  const config = getConfig(keys.slice(0, 4095)); // haproxy max servers
+
   await saveHaproxyConfig(config);
 }
 
