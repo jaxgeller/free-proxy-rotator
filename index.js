@@ -10,6 +10,10 @@ const PROXY_OPTIONS = {
   sourcesBlackList: ['kingproxies', 'bitproxies']
 };
 
+const CWD = require('process').cwd()
+const PORT = process.env.PORT || 1339
+const REFRESH_RATE = process.env.REFRESH_RATE || 60
+
 function renderProxies(proxies) {
   return proxies
     .map((proxy, i) => `  server proxy${i} ${proxy}`) // intentional 2 spaces
@@ -34,7 +38,7 @@ defaults
   timeout server 20s
 
 frontend localnodes
-  bind *:1339
+  bind *:${PORT}
   mode http
   default_backend proxies
 
@@ -68,26 +72,26 @@ function sortProxiesByPing(proxies) {
 }
 
 function getHaproxyPID() {
-  return readFile('ha.pid');
+  return readFile(`${CWD}/ha.pid`);
 }
 
 function startHaproxy() {
   console.log('launching haproxy');
-  return exec('haproxy -f haproxy.cfg');
+  return exec(`haproxy -f ${CWD}/haproxy.cfg`);
 }
 
 function reloadHaproxy() {
   console.log('reloading haproxy');
-  return exec('haproxy -sf $(cat ha.pid) -f haproxy.cfg');
+  return exec(`haproxy -sf $(cat ${CWD}/ha.pid) -f ${CWD}/haproxy.cfg`);
 }
 
 function killHaproxy() {
   console.log('killing existing haproxy');
-  return exec('kill -9 $(cat ha.pid) 2>/dev/null');
+  return exec(`kill -9 $(cat ${CWD}/ha.pid) 2>/dev/null`);
 }
 
 function saveHaproxyConfig(config) {
-  return writeFile('haproxy.cfg', config);
+  return writeFile(`${CWD}/haproxy.cfg`, config);
 }
 
 async function getAndSaveProxyList() {
@@ -109,7 +113,7 @@ function tick() {
     }
 
     return tick();
-  }, 30 * 1000);
+  }, REFRESH_RATE * 1000);
 }
 
 async function main() {
