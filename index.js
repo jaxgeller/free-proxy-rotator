@@ -58,6 +58,7 @@ function getProxyList() {
         proxies.forEach(proxy => {
           if (!ip.isV4Format(proxy.ipAddress)) return;
           if (proxy.port < 80) return;
+          if (proxy.port === PORT) return;
 
           const el = `${proxy.ipAddress}:${proxy.port}`;
 
