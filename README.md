@@ -10,7 +10,7 @@ Tunnel requests through free proxies found online. Proxy quality is low, use wit
 ### Running
 
 ```bash
-$ docker run -p 1339:1339 jaxgeller/rotating-proxy
+$ docker run -p 1339:1339 jaxgeller/free-proxy-rotator
 $ curl --proxy localhost:1339 http://httpbin.org/ip
 ```
 
