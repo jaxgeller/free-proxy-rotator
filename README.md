@@ -1,6 +1,6 @@
 # Free Proxy Rotator
 
-Tunnel requests through free proxies found online. Proxy quality is low, use with caution.
+Tunnel requests through free proxies found online. Proxy quality is low, **use with caution**.
 
 + Proxies managed by haproxy, no need to cycle
 + Proxies are rotated every 60 seconds based on ping
