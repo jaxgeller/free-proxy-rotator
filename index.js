@@ -14,6 +14,10 @@ const CWD = process.cwd()
 const PORT = process.env.PORT || 1339
 const REFRESH_RATE = process.env.REFRESH_RATE || 60
 
+const PID_FILE = `${CWD}/ha.pid`;
+const CFG_FILE = `${CWD}/haproxy.cfg`;
+const HAPROXY_CMD = 'haproxy';
+
 function renderProxies(proxies) {
   return proxies
     .filter(proxy => proxy !== undefined)
@@ -78,26 +82,26 @@ function sortProxiesByPing(proxies) {
 }
 
 function getHaproxyPID() {
-  return readFile(`${CWD}/ha.pid`);
+  return readFile(`${PID_FILE}`);
 }
 
 function startHaproxy() {
   console.log('launching haproxy');
-  return exec(`haproxy -f ${CWD}/haproxy.cfg`);
+  return exec(`${HAPROXY_CMD} -f ${CFG_FILE}`);
 }
 
 function reloadHaproxy() {
   console.log('reloading haproxy');
-  return exec(`haproxy -sf $(cat ${CWD}/ha.pid) -f ${CWD}/haproxy.cfg`);
+  return exec(`${HAPROXY_CMD} -sf $(cat ${PID_FILE}) -f ${CFG_FILE}`);
 }
 
 function killHaproxy() {
   console.log('killing existing haproxy');
-  return exec(`kill -9 $(cat ${CWD}/ha.pid) 2>/dev/null`);
+  return exec(`kill -9 $(cat ${PID_FILE}) 2>/dev/null`);
 }
 
 function saveHaproxyConfig(config) {
-  return writeFile(`${CWD}/haproxy.cfg`, config);
+  return writeFile(`${CFG_FILE}`, config);
 }
 
 async function getAndSaveProxyList() {
